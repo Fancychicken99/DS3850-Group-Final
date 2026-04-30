@@ -15,7 +15,7 @@ def getAllTeams():
     # Return all teams from the database
     conn = getDBConnection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM teams ORDER BY name")
+    cursor.execute("SELECT * FROM nba_teams ORDER BY name")
     teams = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return teams
@@ -58,7 +58,7 @@ def deleteTeam(teamID):
     # Delete a team (players will also be deleted)
     conn = getDBConnection()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM teams WHERE id=?", (teamID,))
+    cursor.execute("DELETE FROM nba_teams WHERE id=?", (teamID,))
     conn.commit()
     conn.close()
 
@@ -70,7 +70,7 @@ def getPlayersByTeam(teamID):
     # Get all players belonging to a specific team
     conn = getDBConnection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM players WHERE team_id = ? ORDER BY name", (teamID,))
+    cursor.execute("SELECT * FROM nba_players WHERE team_id = ? ORDER BY name", (teamID,))
     players = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return players
@@ -122,6 +122,6 @@ def deletePlayer(playerID):
     # Delete a single player
     conn = getDBConnection()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM players WHERE id=?", (playerID,))
+    cursor.execute("DELETE FROM nba_players WHERE id=?", (playerID,))
     conn.commit()
     conn.close()
