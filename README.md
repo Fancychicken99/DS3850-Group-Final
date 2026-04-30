@@ -5,7 +5,7 @@ Our domain is a fake NBA league database with two tables including teams and pla
 
 To use our project, download the gui.py and Database.py files. Make sure they are in the same folder. Run the gui.py file and your database 
 
-- Brody Mensonidas - GITHUB and Database creation 
+- Brody Mensonides - GITHUB and Database creation 
 
 - Isaac Waycott - GUI
 
