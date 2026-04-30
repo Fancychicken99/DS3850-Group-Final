@@ -1,6 +1,6 @@
 # ============================================================
 # DS3850 — Group Project - Main.py
-# Name: Group 3 (Brody Mensonides, Brodi Remick, Connor Beck, Isaac Waycott)
+# Name: Connor Beck
 # Section: 001
 # Date: 04/29/2026
 # ============================================================
