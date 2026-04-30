@@ -3,6 +3,8 @@ Final project in John Weaver's DS3850 applications development class
 
 Our domain is a fake NBA league database with two tables including teams and players
 
+To use our project, download and run the program through the GUI file
+
 - Brody Mensonidas - GITHUB and Database creation 
 
 - Isaac Waycott - GUI
@@ -13,7 +15,7 @@ Our domain is a fake NBA league database with two tables including teams and pla
 
 In our project, their are three main tabs: Teams, Players, and Report. 
 
-The Teams tab includes a list of all teams and their info, including the Team Name, City, Conference, Division, Coach, and Owner. 
+The Teams tab includes a list of all teams and their info, including the Team Name, City, Conference, Division, Coach, and Owner. After selecting a team, you are able to change any of their information.
 
 The Players tab includes a list of all players and their info, including their Team Name, Number, Salary, Injury status, Points, Rebounds, and Assists. After selecting a player, you are able to change any of their information. 
 
