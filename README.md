@@ -3,7 +3,7 @@ Final project in John Weaver's DS3850 applications development class
 
 Our domain is a fake NBA league database with two tables including teams and players
 
-To use our project, download the gui.py and Database.py files. Make sure they are in the same folder. Run the gui.py file and your database 
+To use our project, download the repo and run the gui.py file. It acts as the main and imports all the other files into it so it works cleanly.
 
 - Brody Mensonides - GITHUB and Database creation 
 
