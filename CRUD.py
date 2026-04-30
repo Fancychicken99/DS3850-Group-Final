@@ -1,6 +1,9 @@
-# crud.py
-# This file contains all Create, Read, Update, Delete operations
-# for both Teams and Players tables
+# ============================================================
+# DS3850 — Group Project - CRUD.py
+# Name: Brody Mensonides
+# Section: 001
+# Date: 04/29/2026
+# ============================================================
 
 from Database import getDBConnection
 

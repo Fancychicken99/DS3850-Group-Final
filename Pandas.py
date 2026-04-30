@@ -1,5 +1,5 @@
 # ============================================================
-# DS3850 — Group Project - Pandas
+# DS3850 — Group Project - Pandas.py
 # Name: Brodi Remick
 # Section: 001
 # Date: 04/29/2026
@@ -70,28 +70,37 @@ def player_report(position=None):
     if position and position != "All":
         df = df[df["position"].str.lower() == position.lower()]
 
-    summary = pd.DataFrame([{
-        "Position": selected_position,
-        "Player_Count": len(df),
-        "Avg_Points": round(float(df["pts"].mean()), 1) if not df.empty else 0,
-        "Avg_Rebounds": round(float(df["reb"].mean()), 1) if not df.empty else 0,
-        "Avg_Assists": round(float(df["ast"].mean()), 1) if not df.empty else 0
-    }])
+    summary = pd.DataFrame(
+        [
+            {
+                "Position": selected_position,
+                "Player_Count": len(df),
+                "Avg_Points": round(float(df["pts"].mean()), 1) if not df.empty else 0,
+                "Avg_Rebounds": (
+                    round(float(df["reb"].mean()), 1) if not df.empty else 0
+                ),
+                "Avg_Assists": round(float(df["ast"].mean()), 1) if not df.empty else 0,
+            }
+        ]
+    )
 
-    players = df[[
-        "Player_Name",
-        "position",
-        "injury_status",
-        "pts",
-        "reb",
-        "ast",
-        "Team_Name"
-    ]].sort_values(["position", "Team_Name", "Player_Name"]).reset_index(drop=True)
+    players = (
+        df[
+            [
+                "Player_Name",
+                "position",
+                "injury_status",
+                "pts",
+                "reb",
+                "ast",
+                "Team_Name",
+            ]
+        ]
+        .sort_values(["position", "Team_Name", "Player_Name"])
+        .reset_index(drop=True)
+    )
 
-    return {
-        "summary": summary,
-        "players": players
-    }
+    return {"summary": summary, "players": players}
 
 
 # Team summary
@@ -99,25 +108,17 @@ def player_report(position=None):
 def team_summary(team_name=None):
     df = load_player_report()
 
-    summary = df.groupby(
-        ["Team_Name"],
-        as_index=False
-    ).agg(
+    summary = df.groupby(["Team_Name"], as_index=False).agg(
         Player_Count=("Player_Name", "count"),
         Avg_Points=("pts", "mean"),
         Avg_Rebounds=("reb", "mean"),
         Avg_Assists=("ast", "mean"),
-        Injured_Players=("injury_status", lambda status: (status == "Y").sum())
+        Injured_Players=("injury_status", lambda status: (status == "Y").sum()),
     )
 
-    top_scorers = df.loc[df.groupby("Team_Name")["pts"].idxmax(), [
-        "Team_Name",
-        "Player_Name",
-        "pts"
-    ]].rename(columns={
-        "Player_Name": "Top_Scorer",
-        "pts": "Top_Scorer_Points"
-    })
+    top_scorers = df.loc[
+        df.groupby("Team_Name")["pts"].idxmax(), ["Team_Name", "Player_Name", "pts"]
+    ].rename(columns={"Player_Name": "Top_Scorer", "pts": "Top_Scorer_Points"})
 
     summary = summary.merge(top_scorers, on="Team_Name")
 
@@ -125,25 +126,25 @@ def team_summary(team_name=None):
 
     summary[average_columns] = summary[average_columns].round(1)
 
-    summary = summary.rename(columns={
-        "Team_Name": "Team"
-    })
+    summary = summary.rename(columns={"Team_Name": "Team"})
 
-    summary = summary[[
-        "Team",
-        "Player_Count",
-        "Injured_Players",
-        "Avg_Points",
-        "Avg_Rebounds",
-        "Avg_Assists",
-        "Top_Scorer",
-        "Top_Scorer_Points"
-    ]]
+    summary = summary[
+        [
+            "Team",
+            "Player_Count",
+            "Injured_Players",
+            "Avg_Points",
+            "Avg_Rebounds",
+            "Avg_Assists",
+            "Top_Scorer",
+            "Top_Scorer_Points",
+        ]
+    ]
 
     if team_name:
-        summary = summary[
-            summary["Team"].str.lower() == team_name.lower()
-        ].reset_index(drop=True)
+        summary = summary[summary["Team"].str.lower() == team_name.lower()].reset_index(
+            drop=True
+        )
 
     return summary
 
@@ -157,16 +158,13 @@ def selected_team_data(team_name):
         return None, pd.DataFrame()
 
     players = load_player_report()
-    players = players[
-        players["Team_Name"].str.lower() == team_name.lower()
-    ][[
-        "Player_Name",
-        "position",
-        "injury_status",
-        "pts",
-        "reb",
-        "ast"
-    ]].sort_values("pts", ascending=False).reset_index(drop=True)
+    players = (
+        players[players["Team_Name"].str.lower() == team_name.lower()][
+            ["Player_Name", "position", "injury_status", "pts", "reb", "ast"]
+        ]
+        .sort_values("pts", ascending=False)
+        .reset_index(drop=True)
+    )
 
     return team_data.iloc[0], players
 
@@ -214,28 +212,43 @@ def league_summary():
         return {
             "Stat": stat_name,
             "Player": player["Player_Name"],
-            "Value": round(float(player[column_name]), 2)
+            "Value": round(float(player[column_name]), 2),
         }
 
     summary_rows = [
         {"Stat": "Total Teams", "Value": df["Team_Name"].nunique(), "Player": ""},
         {"Stat": "Total Players", "Value": len(df), "Player": ""},
-        {"Stat": "Injured Players", "Value": int((df["injury_status"] == "Y").sum()), "Player": ""},
-        {"Stat": "Average Points", "Value": round(float(df["pts"].mean()), 2), "Player": ""},
-        {"Stat": "Average Rebounds", "Value": round(float(df["reb"].mean()), 2), "Player": ""},
-        {"Stat": "Average Assists", "Value": round(float(df["ast"].mean()), 2), "Player": ""}
+        {
+            "Stat": "Injured Players",
+            "Value": int((df["injury_status"] == "Y").sum()),
+            "Player": "",
+        },
+        {
+            "Stat": "Average Points",
+            "Value": round(float(df["pts"].mean()), 2),
+            "Player": "",
+        },
+        {
+            "Stat": "Average Rebounds",
+            "Value": round(float(df["reb"].mean()), 2),
+            "Player": "",
+        },
+        {
+            "Stat": "Average Assists",
+            "Value": round(float(df["ast"].mean()), 2),
+            "Player": "",
+        },
     ]
 
     highest_stats = [
         highest_stat_row("Highest Points", "pts"),
         highest_stat_row("Highest Rebounds", "reb"),
-        highest_stat_row("Highest Assists", "ast")
+        highest_stat_row("Highest Assists", "ast"),
     ]
 
     summary = pd.DataFrame(highest_stats + summary_rows)[["Stat", "Value", "Player"]]
     summary["Value"] = pd.Series(
-        [clean_number(value) for value in summary["Value"]],
-        dtype=object
+        [clean_number(value) for value in summary["Value"]], dtype=object
     )
 
     return summary

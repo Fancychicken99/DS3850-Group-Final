@@ -1,5 +1,9 @@
-# database.py
-# This file handles database connection, table creation, and seed data
+# ============================================================
+# DS3850 — Group Project - Database.py
+# Name: Brody Mensonides
+# Section: 001
+# Date: 04/29/2026
+# ============================================================
 
 import sqlite3
 
