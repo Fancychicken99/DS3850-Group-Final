@@ -1,3 +1,5 @@
+## Isaac Waycott
+
 import customtkinter as ctk
 from tkinter import ttk, messagebox, filedialog
 
