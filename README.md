@@ -11,4 +11,10 @@ Our domain is a fake NBA league database with two tables including teams and pla
 
 - Connor Beck - NumPY
 
-In our project, their are three main tabs: Teams, Players, and Report. The Teams includes a list of all teams, The players includes a list of all players, and the report allows you to select different kinds of summaries to view. These include certain positions, teams, or the league as a whole.
+In our project, their are three main tabs: Teams, Players, and Report. 
+
+The Teams tab includes a list of all teams and their info, including the Team Name, City, Conference, Division, Coach, and Owner. 
+
+The Players tab includes a list of all players and their info, including their Team Name, Number, Salary, Injury status, Points, Rebounds, and Assists. After selecting a player, you are able to change any of their information. 
+
+The Report tab allows you to select different kinds of summaries to view. These summaries include specific positions, teams, or the league as a whole. After selecting your report, you are able to export and download it to your computer. 
