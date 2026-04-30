@@ -61,6 +61,15 @@ def available_positions():
     return sorted(df["position"].dropna().unique())
 
 
+def available_export_reports():
+    return [
+        "player",
+        "team",
+        "selected_team",
+        "league"
+    ]
+
+
 # Player report
 # Returns a summary first, then the filtered player list for the UI table.
 def player_report(position=None):
@@ -221,9 +230,9 @@ def league_summary():
         {"Stat": "Total Teams", "Value": df["Team_Name"].nunique(), "Player": ""},
         {"Stat": "Total Players", "Value": len(df), "Player": ""},
         {"Stat": "Injured Players", "Value": int((df["injury_status"] == "Y").sum()), "Player": ""},
-        {"Stat": "Average Points", "Value": round(float(df["pts"].mean()), 2), "Player": ""},
-        {"Stat": "Average Rebounds", "Value": round(float(df["reb"].mean()), 2), "Player": ""},
-        {"Stat": "Average Assists", "Value": round(float(df["ast"].mean()), 2), "Player": ""}
+        {"Stat": "Average Points", "Value": round(float(df["pts"].mean()), 1), "Player": ""},
+        {"Stat": "Average Rebounds", "Value": round(float(df["reb"].mean()), 1), "Player": ""},
+        {"Stat": "Average Assists", "Value": round(float(df["ast"].mean()), 1), "Player": ""}
     ]
 
     highest_stats = [
@@ -242,8 +251,46 @@ def league_summary():
 
 
 # CSV export
-# This exports the current full player report for download or sharing.
-def export_report_to_csv():
-    df = player_report()["players"]
-    df.to_csv("nba_player_report.csv", index=False)
-    return "nba_player_report.csv"
+# The UI can pass the report type the user selected from an export dropdown.
+def export_report_to_csv(report_type="player", position=None, team_name=None, filename=None):
+    report_type = report_type.lower().strip()
+
+    if report_type == "player":
+        filename = filename or "nba_player_report.csv"
+        report = player_report(position)
+
+        with open(filename, "w", newline="") as csv_file:
+            csv_file.write("Player Report Summary\n")
+            report["summary"].to_csv(csv_file, index=False)
+            csv_file.write("\nPlayer List\n")
+            report["players"].to_csv(csv_file, index=False)
+
+    elif report_type == "team":
+        filename = filename or "nba_team_summary.csv"
+        team_summary().to_csv(filename, index=False)
+
+    elif report_type == "selected_team":
+        if not team_name:
+            raise ValueError("team_name is required when exporting selected_team.")
+
+        filename = filename or "nba_selected_team_summary.csv"
+        team_data, players = selected_team_data(team_name)
+
+        if team_data is None:
+            raise ValueError(f"No team found for: {team_name}")
+
+        with open(filename, "w", newline="") as csv_file:
+            csv_file.write("Selected Team Summary\n")
+            pd.DataFrame([team_data]).to_csv(csv_file, index=False)
+            csv_file.write("\nRoster\n")
+            players.to_csv(csv_file, index=False)
+
+    elif report_type == "league":
+        filename = filename or "nba_league_summary.csv"
+        league_summary().to_csv(filename, index=False)
+
+    else:
+        valid_reports = ", ".join(available_export_reports())
+        raise ValueError(f"Invalid report_type. Choose one of: {valid_reports}")
+
+    return filename
